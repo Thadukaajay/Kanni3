@@ -16,6 +16,7 @@ env:
 jobs:
   Infrastructure:
     runs-on: ubuntu-latest
+    environment: Production
     steps:
     - name: Checkout
       uses: actions/checkout@v2
