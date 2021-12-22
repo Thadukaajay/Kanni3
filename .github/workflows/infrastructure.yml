@@ -1,0 +1,59 @@
+name: infrastructure
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - '.github/workflows/infrastructure.yml'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  FUNCTION_APP_NAME: afu-deployment-net6-fa
+  LOCATION: westeurope
+  RESOURCE_GROUP_NAME: afu-deployment-rg
+  STORAGE_ACCOUNT_NAME: afudeployment
+  
+jobs:
+  Infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1.4.2
+      with:
+        creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+    - name: Create Resource Group
+      uses: azure/CLI@v1.0.6
+      with:
+        inlineScript: |
+          az group create \
+            --name ${{ env.RESOURCE_GROUP_NAME }} \
+            --location ${{ env.LOCATION }} \
+            --tags type=afu
+    - name: Create Storage Account
+      uses: azure/CLI@v1.0.6
+      with:
+        inlineScript: |
+          az storage account create \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --location ${{ env.LOCATION }} \
+            --sku Standard_LRS \
+            --kind StorageV2 \
+            --access-tier Hot
+    - name: Create Function App
+      uses: azure/CLI@v1.0.6
+      with:
+        inlineScript: |
+          az functionapp create \
+            --name ${{ env.FUNCTION_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --consumption-plan-location ${{ env.LOCATION }} \
+            --storage-account ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --runtime dotnet-isolated \
+            --os-type Windows \
+            --functions-version 4
