@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
 
 env:
-  FUNCTION_APP_NAME: myfirstfunctionapp-fa
-  FUNCTION_APP_PACKAGE_PATH: '/src/MyFirstAzureFunction'
-  RESOURCE_GROUP_NAME: myfirstfunction-rg
+  FUNCTION_APP_NAME: afu-deployment-net6-fa
+  FUNCTION_APP_PACKAGE_PATH: '/AzFuncUni.Http'
+  RESOURCE_GROUP_NAME: afu-deployment-rg
   DOTNET_VERSION: '6.0.x'
 
 jobs:
