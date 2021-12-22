@@ -3,9 +3,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+    paths:
+    - 'AzFuncUni.Http/**'
+    - '.github/workflows/application.yml'
   workflow_dispatch:
 
 env:
