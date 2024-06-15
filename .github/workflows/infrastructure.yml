@@ -25,7 +25,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
     - name: Create Resource Group
-      uses: azure/CLI@v1.0.6
+      uses: azure/CLI@v2.0.0
       with:
         inlineScript: |
           az group create \
@@ -33,7 +33,7 @@ jobs:
             --location ${{ env.LOCATION }} \
             --tags type=afu
     - name: Create Storage Account
-      uses: azure/CLI@v1.0.6
+      uses: azure/CLI@v2.0.0
       with:
         inlineScript: |
           az storage account create \
@@ -44,7 +44,7 @@ jobs:
             --kind StorageV2 \
             --access-tier Hot
     - name: Create Function App
-      uses: azure/CLI@v1.0.6
+      uses: azure/CLI@v2.0.0
       with:
         inlineScript: |
           az functionapp create \
