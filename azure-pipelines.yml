@@ -1,0 +1,119 @@
+pool:
+  vmImage: 'ubuntu-latest'
+trigger:
+  branches:
+    include:
+    - master
+    - feature/*
+  paths:
+    include:
+    - deployment/tradein_vehicle_acquisition_discussed/*
+    exclude:
+    - deployment/*
+variables:
+- name: System.Debug
+  value: true
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build job
+    pool:
+      vmImage: 'ubuntu-latest'
+    # steps:
+    # - task: AzureCLI@2
+    #   inputs:
+    #     azureSubscription: 'crml-azure-service'
+    #     scriptType: 'bash'
+    #     scriptLocation: 'inlineScript'
+    #     inlineScript: |
+    #       # set model version from config.py
+    #       cd deployment/tradein_vehicle_acquisition_discussed
+    #       export MODEL_VERSION=`python -c "import config;print(config.MODEL_VERSION)"`
+    #       az extension add --name ml -y
+    #       az ml model download --name tradein-vehicle-acquisition-discussed --version $MODEL_VERSION --workspace-name machine-learning --resource-group machine-learning-rg -p model-artifacts
+    # - task: PipAuthenticate@1
+    #   displayName: Auth to Azdo Artifacts Feed
+    #   inputs:
+    #     artifactFeeds: 'b1dd545e-b541-4147-b04b-cc8029769d4c/CallRevuMLPackages'
+    #     onlyAddExtraIndex: True
+    # - task: Docker@2
+    #   displayName: 'Build container image'
+    #   inputs:
+    #     containerRegistry: 'crmlcontainers'
+    #     repository: 'crml/trade-in-acquisition-discussed'
+    #     command: 'build'
+    #     arguments: --build-arg PIP_AUTH=$(PIP_EXTRA_INDEX_URL)
+    #     Dockerfile: 'deployment/tradein_vehicle_acquisition_discussed/Dockerfile'
+    #     tags: |
+    #       latest
+    #       build-$(Build.BuildNumber)
+    # - task: Docker@2
+    #   displayName: 'Push image to ACR'
+    #   inputs:
+    #     containerRegistry: 'crmlcontainers'
+    #     repository: 'crml/trade-in-acquisition-discussed'
+    #     command: 'push'
+    #     tags: |
+    #       latest
+    #       build-$(Build.BuildNumber)
+    # - task: PublishPipelineArtifact@1
+    #   inputs:
+    #     targetPath: '$(Pipeline.Workspace)'
+    #     artifact: 'dummyOutput'
+    #     publishLocation: 'pipeline'
+    # - task: Bash@3
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       # Write your commands here
+
+    #       echo 'Hello world' > $(Build.ArtifactStagingDirectory)/fakeOutput.txt
+    # - task: KubernetesManifest@1
+    #   inputs:
+    #     action: 'bake'
+    #     namespace: 'crml-sales-vision'
+    #     helmChart: 'deployment/tradein_vehicle_acquisition_discussed/deployment'
+    #     releaseName: 'trade-in-acquisition-discussed'
+    #     overrides: 'image.tag=build-$(Build.BuildNumber)'
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    #     ArtifactName: 'drop'
+    #     publishLocation: 'Container'
+    #     StoreAsTar: true
+- stage: DeployToDev
+  displayName: 'Deploy stage'
+  jobs:
+  - deployment: DevDeploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment:
+      name: 'mldev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'crml-azure-service'
+              scriptType: 'batch'
+              scriptLocation: 'inlineScript'
+              inlineScript: 'echo "Hello World"'
+          # - task: HelmDeploy@0
+          #   displayName: Helm install
+          #   inputs:
+          #     connectionType: 'Kubernetes Service Connection'
+          #     kubernetesServiceConnection: 'ml-aks-dev'
+          #     kubernetesCluster: 'ml-aks-dev'
+          #     command: upgrade
+          #     install: true
+          #     force: true
+          #     valueFile: deployment/tradein_vehicle_acquisition_discussed/deployment/values.yaml
+          #     chartType: FilePath
+          #     chartPath: deployment/tradein_vehicle_acquisition_discussed/deployment
+          #     releaseName: 'trade-in-acquisition-discussed'
+          #     namespace: 'crml-sales-vision'
+          #     overrideValues: image.tag=build-$(Build.BuildNumber)
+
