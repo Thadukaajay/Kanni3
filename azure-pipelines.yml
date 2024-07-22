@@ -90,7 +90,7 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     environment:
-      name: 'mldev'
+      name: 'm2dev'
     strategy:
       runOnce:
         deploy:
