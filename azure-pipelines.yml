@@ -97,7 +97,7 @@ stages:
           steps:
           - task: AzureCLI@2
             inputs:
-              azureSubscription: 'crml-azure-service'
+              azureSubscription: 'AJAY666666'
               scriptType: 'batch'
               scriptLocation: 'inlineScript'
               inlineScript: 'echo "Hello World"'
