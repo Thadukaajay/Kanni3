@@ -23,9 +23,9 @@ stages:
       vmImage: 'ubuntu-latest'
 
 - stage: DeployToDev
-  displayName: 'Deploy stage'
+  displayName: '1'
   jobs:
-  - deployment: DevDeploy
+  - deployment: test2
     pool:
       vmImage: 'ubuntu-latest'
     environment:
