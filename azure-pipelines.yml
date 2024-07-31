@@ -72,12 +72,17 @@ stages:
           runOnce:
             deploy:
               steps:
-              - task: AzureCLI@2
-                inputs:
-                  azureSubscription: 'AJAY666666'
-                  scriptType: 'batch'
-                  scriptLocation: 'inlineScript'
-                  inlineScript: 'echo "Hello World"'
+                - task: AzureFunctionApp@1
+                  displayName: 'Azure Function App Deploy: crm-fserrorhan-uat-fa-usc1-00'
+                  inputs:
+                    azureSubscription: 'AJAY666666'
+                    appType: 'functionApp'
+                    appName: 'crm-fserrorhan-uat-fa-usc1-00'
+                    deployToSlotOrASE: true
+                    resourceGroupName: 'crm-integration-uat-rg-usc1-00'
+                    slotName: 'production'
+                    package: '$(Pipeline.Workspace)/drop/WebApp.zip'
+                    deploymentMethod: 'auto'
               # - task: HelmDeploy@0
               #   displayName: Helm install
               #   inputs:
