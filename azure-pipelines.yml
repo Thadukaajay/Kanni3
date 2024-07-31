@@ -22,24 +22,24 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
 
-# - stage: DeployToDev
-#   displayName: 'Deploy stage'
-#   jobs:
-#   - deployment: DevDeploy
-#     pool:
-#       vmImage: 'ubuntu-latest'
-#     environment:
-#       name: 'm2dev'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: AzureCLI@2
-#             inputs:
-#               azureSubscription: 'AJAY666666'
-#               scriptType: 'batch'
-#               scriptLocation: 'inlineScript'
-#               inlineScript: 'echo "Hello World"'
+- stage: DeployToDev
+  displayName: 'Deploy stage'
+  jobs:
+  - deployment: DevDeploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment:
+      name: 'm2dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'AJAY666666'
+              scriptType: 'batch'
+              scriptLocation: 'inlineScript'
+              inlineScript: 'echo "Hello World"'
           # - task: HelmDeploy@0
           #   displayName: Helm install
           #   inputs:
