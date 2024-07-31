@@ -56,3 +56,40 @@ stages:
           #     namespace: 'crml-sales-vision'
           #     overrideValues: image.tag=build-$(Build.BuildNumber)
 
+- stage: UAT1
+  displayName: 'Deploy to UAT Azure App Service'
+  # jobs:
+  # - deployment: Deploy_UAT11
+  jobs:
+      - deployment: Deploy_UAT1
+        displayName: Deploy to UAT 
+        environment: UAT-ErrorHandler
+        pool:
+          vmImage: 'ubuntu-latest'
+        # environment:
+        #   name: 'm2dev'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: AzureCLI@2
+                inputs:
+                  azureSubscription: 'AJAY666666'
+                  scriptType: 'batch'
+                  scriptLocation: 'inlineScript'
+                  inlineScript: 'echo "Hello World"'
+              # - task: HelmDeploy@0
+              #   displayName: Helm install
+              #   inputs:
+              #     connectionType: 'Kubernetes Service Connection'
+              #     kubernetesServiceConnection: 'ml-aks-dev'
+              #     kubernetesCluster: 'ml-aks-dev'
+              #     command: upgrade
+              #     install: true
+              #     force: true
+              #     valueFile: deployment/tradein_vehicle_acquisition_discussed/deployment/values.yaml
+              #     chartType: FilePath
+              #     chartPath: deployment/tradein_vehicle_acquisition_discussed/deployment
+              #     releaseName: 'trade-in-acquisition-discussed'
+              #     namespace: 'crml-sales-vision'
+              #     overrideValues: image.tag=build-$(Build.BuildNumber)
