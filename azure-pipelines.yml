@@ -29,7 +29,7 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     environment:
-      name: 'm2dev'
+      name: 'm2dev1'
     strategy:
       runOnce:
         deploy:
@@ -56,33 +56,33 @@ stages:
           #     namespace: 'crml-sales-vision'
           #     overrideValues: image.tag=build-$(Build.BuildNumber)
 
-- stage: UAT1
-  displayName: 'Deploy to UAT Azure App Service'
-  # jobs:
-  # - deployment: Deploy_UAT11
-  jobs:
-      - deployment: Deploy_UAT1
-        displayName: Deploy to UAT 
-        environment: UAT-ErrorHandler
-        pool:
-          vmImage: 'ubuntu-latest'
-        # environment:
-        #   name: 'm2dev'
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureFunctionApp@1
-                  displayName: 'Azure Function App Deploy: crm-fserrorhan-uat-fa-usc1-00'
-                  inputs:
-                    azureSubscription: 'AJAY666666'
-                    appType: 'functionApp'
-                    appName: 'crm-fserrorhan-uat-fa-usc1-00'
-                    deployToSlotOrASE: true
-                    resourceGroupName: 'crm-integration-uat-rg-usc1-00'
-                    slotName: 'production'
-                    package: '$(Pipeline.Workspace)/drop/WebApp.zip'
-                    deploymentMethod: 'auto'
+# - stage: UAT1
+#   displayName: 'Deploy to UAT Azure App Service'
+#   # jobs:
+#   # - deployment: Deploy_UAT11
+#   jobs:
+#       - deployment: Deploy_UAT1
+#         displayName: Deploy to UAT 
+#         environment: UAT-ErrorHandler
+#         pool:
+#           vmImage: 'ubuntu-latest'
+#         # environment:
+#         #   name: 'm2dev'
+#         strategy:
+#           runOnce:
+#             deploy:
+#               steps:
+#                 - task: AzureFunctionApp@1
+#                   displayName: 'Azure Function App Deploy: crm-fserrorhan-uat-fa-usc1-00'
+#                   inputs:
+#                     azureSubscription: 'AJAY666666'
+#                     appType: 'functionApp'
+#                     appName: 'crm-fserrorhan-uat-fa-usc1-00'
+#                     deployToSlotOrASE: true
+#                     resourceGroupName: 'crm-integration-uat-rg-usc1-00'
+#                     slotName: 'production'
+#                     package: '$(Pipeline.Workspace)/drop/WebApp.zip'
+#                     deploymentMethod: 'auto'
               # - task: HelmDeploy@0
               #   displayName: Helm install
               #   inputs:
