@@ -36,7 +36,7 @@ stages:
           steps:
           - task: AzureCLI@2
             inputs:
-              azureSubscription: 'AJAY666666'
+              azureSubscription: 'webapp'
               scriptType: 'batch'
               scriptLocation: 'inlineScript'
               inlineScript: 'echo "Hello World"'
